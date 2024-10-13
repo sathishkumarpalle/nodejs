@@ -13,6 +13,8 @@ phases:
       - docker tag my-app:latest $REPOSITORY_URI:latest
   post_build:
     commands:
+      - echo Listing Docker images...
+      - docker images
       - echo Pushing the Docker image...
       - docker push $REPOSITORY_URI:latest
       - echo Build completed on `date`

@@ -9,9 +9,12 @@ phases:
     commands:
       - echo Building the Docker image...
       - docker build -t my-app .
-      - docker tag my-app:latest 975050198494.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+      - echo Logging in to ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 975050198494.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=975050198494.dkr.ecr.us-east-1.amazonaws.com/my-app
+      - docker tag my-app:latest $REPOSITORY_URI:latest
   post_build:
     commands:
       - echo Pushing the Docker image...
-      - docker push 975050198494.dkr.ecr.us-east-1.amazonaws.com/my-app:latest
+      - docker push $REPOSITORY_URI:latest
       - echo Build completed on `date`

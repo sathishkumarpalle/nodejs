@@ -4,13 +4,11 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login --no-include-email --region us-east-1)
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 975050198494.dkr.ecr.us-east-1.amazonaws.com
   build:
     commands:
       - echo Building the Docker image...
       - docker build -t my-app .
-      - echo Logging in to ECR...
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 975050198494.dkr.ecr.us-east-1.amazonaws.com
       - REPOSITORY_URI=975050198494.dkr.ecr.us-east-1.amazonaws.com/my-app
       - docker tag my-app:latest $REPOSITORY_URI:latest
   post_build:
